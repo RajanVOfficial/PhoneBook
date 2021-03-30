@@ -1,0 +1,13 @@
+spring:
+  datasource:
+    url: jdbc:h2:mem:testdb
+    driver-class-name: org.hibernate.dialect.H2Dialect
+    username: sa
+    password: null
+  mvc:
+    view:
+      prefix: /view/
+      suffix: .jsp
+
+server:
+  port: 9090
