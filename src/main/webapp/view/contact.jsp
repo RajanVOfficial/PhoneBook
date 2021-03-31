@@ -16,6 +16,7 @@
 		<table>
 			<tr>
 				<td>Name : </td>
+				<form:hidden path="contactId"/>
 				<td><form:input path="contactName"/></td>
 			</tr>
 			<tr>
@@ -31,5 +32,7 @@
 			</tr>
 		</table>
 	</form:form>
+	
+	<a href="view-contacts">View All Contacts</a>
 </body>
 </html>

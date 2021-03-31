@@ -2,6 +2,9 @@ package com.ashokit.controller;
 
 import com.ashokit.entity.Contact;
 import com.ashokit.service.ContactService;
+
+import java.util.List;
+
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -34,18 +37,32 @@ public class ContactInfoController {
     
     @PostMapping("/saveContact")
     public String handleSubmitBtn(Model model, Contact contact) {
+    
+    	String successMsg = "Contact Saved";
+    	String failMsg = "Failed to save contact";
+    	
+    	if(contact.getContactId()!=null) {
+    		successMsg = "Contact Updated Successfully!";
+    		failMsg = "Failed to Update Contact";
+    	} 
+    	
     	boolean isSaved = service.saveOrUpdateContact(contact);
     	
     	if(isSaved) {
-    		model.addAttribute("successMsg", "Contact Saved");
+    		model.addAttribute("successMsg", successMsg);
     	} else {
-    		model.addAttribute("failMsg", "Failed to save contact");
+    		model.addAttribute("failMsg", failMsg);
     	}
     	return "contact";
     }
     
-    public String viewContactHyperLink() {
+    @GetMapping("/view-contacts")
+    public String viewContactHyperLink(Model model) {
     	
-    	return "allcontact";
+    	List<Contact> allContacts = service.getAllContacts();   
+    	
+    	model.addAttribute("contacts", allContacts);
+    	
+    	return "contacts-display";
     }
 }
