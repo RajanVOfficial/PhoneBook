@@ -18,7 +18,8 @@
 </head>
 <body>
 	<h3>View Contacts</h3>
-	${successMsg}${failMsg}
+	${successMsg}
+	${failMsg}
 	<br>
 	<a href="load-form">+Add New Contact</a>
 	<table border="1">

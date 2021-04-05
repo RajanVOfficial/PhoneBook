@@ -11,3 +11,12 @@ spring:
 
 server:
   port: 9090
+  
+  
+phonebook: 
+  messages:
+     contactSaveSucc: Contact Saved Successfully
+     contactSaveFail: Failed to save contact
+     contactUpdateSucc: Contact Updadted Successfully
+     contactDeleteSucc: Contact Deleted Successfully
+     contactDeleteFail: Contact Failed to Delete  

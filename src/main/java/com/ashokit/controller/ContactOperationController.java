@@ -1,13 +1,16 @@
 package com.ashokit.controller;
 
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.ashokit.entity.Contact;
+import com.ashokit.props.AppProperties;
 import com.ashokit.service.ContactService;
 
 @Controller
@@ -15,8 +18,11 @@ public class ContactOperationController {
 	
 	private ContactService service;
 
-	public ContactOperationController(ContactService service) {
+	private AppProperties props;
+	
+	public ContactOperationController(ContactService service, AppProperties props) {
 		this.service = service;
+		this.props = props;
 	}
 	
 	@GetMapping("/edit")
@@ -30,20 +36,16 @@ public class ContactOperationController {
 	}
 	
 	@GetMapping("/delete")
-	public String deleteContact(@RequestParam("cid") Integer contactId, Model model) {
-		
+	public String deleteContact(@RequestParam("cid") Integer contactId, RedirectAttributes redirectAttributes) {
+		Map<String, String> messages = props.getMessages();
 		boolean isDeleted = service.deleteContactById(contactId);
 		
 		if(isDeleted) {
-			model.addAttribute("successMsg", "Contact Deleted Successfully");
+			redirectAttributes.addFlashAttribute("successMsg", messages.get("contactDeleteSucc"));
     	} else {
-    		model.addAttribute("failMsg", "Failed to Delete Contact");
+    		redirectAttributes.addFlashAttribute("failMsg", messages.get("contactDeleteFail"));
     	}
 		
-		List<Contact> allContacts = service.getAllContacts();   
-    	
-    	model.addAttribute("contacts", allContacts);
-		
-		return "contacts-display";
+		return "redirect:view-contacts";
 	}
 }

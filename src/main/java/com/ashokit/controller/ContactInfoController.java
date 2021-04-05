@@ -1,9 +1,11 @@
 package com.ashokit.controller;
 
 import com.ashokit.entity.Contact;
+import com.ashokit.props.AppProperties;
 import com.ashokit.service.ContactService;
 
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -15,12 +17,14 @@ public class ContactInfoController {
 
     private ContactService service;
 
-    public ContactInfoController(ContactService service) {
-        this.service = service;
-    }
-
+    private AppProperties props;
     
-    /**
+    public ContactInfoController(ContactService service, AppProperties props) {
+		this.service = service;
+		this.props = props;
+	}
+
+	/**
      * This method is used to display contact form
      * @return
      */
@@ -37,21 +41,18 @@ public class ContactInfoController {
     
     @PostMapping("/saveContact")
     public String handleSubmitBtn(Model model, Contact contact) {
-    
-    	String successMsg = "Contact Saved";
-    	String failMsg = "Failed to save contact";
-    	
-    	if(contact.getContactId()!=null) {
-    		successMsg = "Contact Updated Successfully!";
-    		failMsg = "Failed to Update Contact";
-    	} 
-    	
+    	Integer cid = contact.getContactId();
     	boolean isSaved = service.saveOrUpdateContact(contact);
+    	Map<String, String> messages = props.getMessages();
     	
     	if(isSaved) {
-    		model.addAttribute("successMsg", successMsg);
+    		if(cid==null) {
+    			model.addAttribute("successMsg", messages.get("contactSaveSucc"));
+        	} else {
+        		model.addAttribute("successMsg", messages.get("contactUpdateSucc"));
+        	}
     	} else {
-    		model.addAttribute("failMsg", failMsg);
+    		model.addAttribute("failMsg", messages.get("contactSaveFail"));
     	}
     	return "contact";
     }
